@@ -24,20 +24,20 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}};
   </script>
-<meta name="description" content="客户端参数 client_id:客户端准入标识 client_secret:客户端密钥 grant_type:授权类型，填写client_credentials表示客户端模式 3）通过Authorization Code获取Access Token通过上面获得的Authorization Code，接下来便可以用其换取一个Access Token。获取方式是：应用在其服务端程序中发送请求（推荐使用">
+<meta name="description" content="DATE_FORMAT计算周有 %U,%u,%V,%v1、首先说说%U跟%u，这两个计算的周是用0-53表示的，不知道大家有没有发现，不是在用这两个  函数的时候，不是每年的1月1日都是第 0 周，有很多都是第 1 周，具体原因是  %U:使用星期天作为一周的第一天，当遇到本年的第一个星期天时，就是第 1 周了，   而前面的计算为第0周。   举例说明：   2012的第一个周日 正好是2013">
 <meta property="og:type" content="article">
-<meta property="og:title" content="security 客户端参数">
-<meta property="og:url" content="http://example.com/2021/03/29/%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%8F%82%E6%95%B0/index.html">
+<meta property="og:title" content="mysql计算周的问题">
+<meta property="og:url" content="http://example.com/2021/04/15/mysql%20%E8%AE%A1%E7%AE%97%E5%91%A8%E7%9A%84%E9%97%AE%E9%A2%98/index.html">
 <meta property="og:site_name" content="鹏鹏">
-<meta property="og:description" content="客户端参数 client_id:客户端准入标识 client_secret:客户端密钥 grant_type:授权类型，填写client_credentials表示客户端模式 3）通过Authorization Code获取Access Token通过上面获得的Authorization Code，接下来便可以用其换取一个Access Token。获取方式是：应用在其服务端程序中发送请求（推荐使用">
+<meta property="og:description" content="DATE_FORMAT计算周有 %U,%u,%V,%v1、首先说说%U跟%u，这两个计算的周是用0-53表示的，不知道大家有没有发现，不是在用这两个  函数的时候，不是每年的1月1日都是第 0 周，有很多都是第 1 周，具体原因是  %U:使用星期天作为一周的第一天，当遇到本年的第一个星期天时，就是第 1 周了，   而前面的计算为第0周。   举例说明：   2012的第一个周日 正好是2013">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-03-29T01:30:15.359Z">
-<meta property="article:modified_time" content="2021-03-29T10:28:08.578Z">
+<meta property="article:published_time" content="2021-04-15T01:48:53.841Z">
+<meta property="article:modified_time" content="2021-04-15T02:02:35.150Z">
 <meta property="article:author" content="熙">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="http://example.com/2021/03/29/%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%8F%82%E6%95%B0/">
+<link rel="canonical" href="http://example.com/2021/04/15/mysql%20%E8%AE%A1%E7%AE%97%E5%91%A8%E7%9A%84%E9%97%AE%E9%A2%98/">
 
 
 <script class="page-configurations">
@@ -49,7 +49,7 @@
     lang   : 'zh-CN'
   };
 </script>
-<title>security 客户端参数 | 鹏鹏</title>
+<title>mysql计算周的问题 | 鹏鹏</title>
   
 
 
@@ -161,7 +161,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#3%EF%BC%89%E9%80%9A%E8%BF%87Authorization-Code%E8%8E%B7%E5%8F%96Access-Token"><span class="nav-number">1.</span> <span class="nav-text">3）通过Authorization Code获取Access Token</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#DATE-FORMAT%E8%AE%A1%E7%AE%97%E5%91%A8%E6%9C%89-U-u-V-v"><span class="nav-number">1.</span> <span class="nav-text">DATE_FORMAT计算周有 %U,%u,%V,%v</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#YEARWEEK-date-mode"><span class="nav-number">2.</span> <span class="nav-text">YEARWEEK(*date*[,*mode*])</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E4%B8%8A%E9%9D%A2%E7%9A%84%E4%BF%A9%E4%B8%AA%E6%96%B9%E6%B3%95mysql-%E8%AE%A1%E7%AE%97%E5%91%A8%E7%9A%84%E6%97%B6%E5%80%99%E4%BC%9A%E5%B9%B4%E7%9A%84%E5%BC%80%E5%A7%8B%E5%92%8C%E7%BB%93%E6%9D%9F%E5%8F%AF%E8%83%BD%E4%BC%9A%E5%87%BA%E7%8E%B0%E5%AE%9E%E9%99%85%E4%B8%9A%E5%8A%A1%E5%91%A8%E4%B8%8D%E7%AC%A6%E5%90%88%E7%9A%84%E6%83%85%E5%86%B5"><span class="nav-number">3.</span> <span class="nav-text">通过上面的俩个方法mysql 计算周的时候会年的开始和结束可能会出现实际业务周不符合的情况</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -217,7 +217,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/29/%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%8F%82%E6%95%B0/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/15/mysql%20%E8%AE%A1%E7%AE%97%E5%91%A8%E7%9A%84%E9%97%AE%E9%A2%98/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -230,7 +230,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          security 客户端参数
+          mysql计算周的问题
         </h1>
 
         <div class="post-meta-container">
@@ -242,7 +242,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2021-03-29 09:30:15 / 修改时间：18:28:08" itemprop="dateCreated datePublished" datetime="2021-03-29T09:30:15+08:00">2021-03-29</time>
+      <time title="创建时间：2021-04-15 09:48:53 / 修改时间：10:02:35" itemprop="dateCreated datePublished" datetime="2021-04-15T09:48:53+08:00">2021-04-15</time>
     </span>
 
   
@@ -255,23 +255,72 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p>客户端参数</p>
-<p>client_id:客户端准入标识</p>
-<p>client_secret:客户端密钥</p>
-<p>grant_type:授权类型，填写client_credentials表示客户端模式</p>
-<h2 id="3）通过Authorization-Code获取Access-Token"><a href="#3）通过Authorization-Code获取Access-Token" class="headerlink" title="3）通过Authorization Code获取Access Token"></a>3）通过Authorization Code获取Access Token</h2><p>通过上面获得的Authorization Code，接下来便可以用其换取一个Access Token。获取方式是：应用在其服务端程序中发送请求（推荐使用POST）到 百度OAuth2.0授权服务的<a target="_blank" rel="noopener" href="https://openapi.baidu.com/oauth/2.0/token%E5%9C%B0%E5%9D%80%EF%BC%8C%E5%B9%B6%E5%B8%A6%E4%B8%8A%E4%BB%A5%E4%B8%8B5%E4%B8%AA%E5%BF%85%E9%A1%BB%E5%8F%82%E6%95%B0%EF%BC%9A">https://openapi.baidu.com/oauth/2.0/token地址，并带上以下5个必须参数：</a></p>
-<ul>
-<li>grant_type：必须参数，此值固定为authorization_code。</li>
-<li>code：必须参数，通过上面第一步所获得的Authorization Code。</li>
-<li>client_id：必须参数，应用的API Key。</li>
-<li>client_secret：必须参数，应用的Secret Key。</li>
-<li>redirect_uri：必须参数，该值必须与获取Authorization Code时传递的redirect_uri保持一致。</li>
-</ul>
-<p>例如：</p>
-<blockquote>
-<p><a target="_blank" rel="noopener" href="https://openapi.baidu.com/oauth/2.0/token?grant_type=authorization_code&amp;code=71c279ccd145a3dff977b38e6a8e34b4&amp;client_id=n1pRXWNYFa4MQLzpDfHyovFb&amp;client_secret=r4GZF9ALIAJjzeNqFPqA86zGbeion6WH&amp;redirect_uri=http://localhost:7080/login">https://openapi.baidu.com/oauth/2.0/token?grant_type=authorization_code&amp;code=71c279ccd145a3dff977b38e6a8e34b4&amp;client_id=n1pRXWNYFa4MQLzpDfHyovFb&amp;client_secret=r4GZF9ALIAJjzeNqFPqA86zGbeion6WH&amp;redirect_uri=http://localhost:7080/login</a></p>
-</blockquote>
-
+        <h3 id="DATE-FORMAT计算周有-U-u-V-v"><a href="#DATE-FORMAT计算周有-U-u-V-v" class="headerlink" title="DATE_FORMAT计算周有 %U,%u,%V,%v"></a>DATE_FORMAT计算周有 %U,%u,%V,%v</h3><p>1、首先说说%U跟%u，这两个计算的周是用0-53表示的，不知道大家有没有发现，不是在用这两个<br>  函数的时候，不是每年的1月1日都是第 <strong>0</strong> 周，有很多都是第 1 周，具体原因是<br>  %U:使用星期天作为一周的第一天，当遇到本年的第一个星期天时，就是第 1 周了，<br>   而前面的计算为第0周。<br>   举例说明：<br>   2012的第一个周日 正好是2013-01-01，那么从这一天开始就是第 1 周，而不是第0周而<br>   2013的第一个周日，是 2013-01-06，那么2013-01-01至2013-01-05是算作第 0 周，而<br>   把2013-01-06 至 2013-01-12 算作2013年的第 1 周<br>   这个%U 与 week(‘2012-01-01’,0) 是等价的；</p>
+<p>  %u:使用星期一作为一周的第一天，这个就不像上面一样了，这里并不是遇到每年的第一个周<br>   一算第 <strong>1</strong> 周，而是计算第一个周一之前的天数如果能超过3天(不包括3天)，那么计算为<br>   第 1 周。否则就计算为第0周。<br>   举例说明：<br>   2012的第一个周一是 01-02 ，那之前就只有2012-01-01这一天，≤3天，所以记为0周，<br>   2013的第一个周一是 01-07 ，之前有 6天，是＞3天的，所以记为第 1 周<br>   这个%u与week(‘2012-01-01’,1) 是等价的；<br>2、在说说 %V 跟 %v ，这两个计算的周是用1-53表示的，</p>
+<p>  %V 与 %U 一样的地方就是也是使用周日作为一周的开始，并且也是遇到第一个周日开始算作是<br>  第一周，但是这两个队这个第一个周日之前的这几天处理不一样，%U是把之前的几天算作第0周<br>  而%V是把之前的几天算作上一年的最后一周。<br>  %V 等价于 week(‘2012-01-01’,2)</p>
+<p>  %v与%u也有相似之处，就是同样适用周一作为 一周的开始,也同样计算每年第一个周一之前的<br>  天数，如果＞3天则记为第 1 周，不同是，如果≤3天，则算作上一年的最后一周<br>  %v 等价于 week(‘2012-01-01’,3)</p>
+<h3 id="YEARWEEK-date-mode"><a href="#YEARWEEK-date-mode" class="headerlink" title="YEARWEEK(*date*[,*mode*])"></a><code>YEARWEEK(*</code>date<code>*[,*</code>mode<code>*])</code></h3><p>例如 2010-3-14 ，礼拜天</p>
+<p>SELECT YEARWEEK(‘2010-3-14’) 返回 11<br>SELECT YEARWEEK(‘2010-3-14’,1) 返回 10</p>
+<p>其中第二个参数是 mode ，具体指的意思如下：</p>
+<table>
+<thead>
+<tr>
+<th>Mode</th>
+<th>First day of week</th>
+<th>Range</th>
+<th>Week 1 is the first week …</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>Sunday</td>
+<td>0-53</td>
+<td>with a Sunday in this year</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Monday</td>
+<td>0-53</td>
+<td>with more than 3 days this year</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Sunday</td>
+<td>1-53</td>
+<td>with a Sunday in this year</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Monday</td>
+<td>1-53</td>
+<td>with more than 3 days this year</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Sunday</td>
+<td>0-53</td>
+<td>with more than 3 days this year</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Monday</td>
+<td>0-53</td>
+<td>with a Monday in this year</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Sunday</td>
+<td>1-53</td>
+<td>with more than 3 days this year</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Monday</td>
+<td>1-53</td>
+<td>with a Monday in this year</td>
+</tr>
+</tbody></table>
+<h3 id="通过上面的俩个方法mysql-计算周的时候会年的开始和结束可能会出现实际业务周不符合的情况"><a href="#通过上面的俩个方法mysql-计算周的时候会年的开始和结束可能会出现实际业务周不符合的情况" class="headerlink" title="通过上面的俩个方法mysql 计算周的时候会年的开始和结束可能会出现实际业务周不符合的情况"></a>通过上面的俩个方法mysql 计算周的时候会年的开始和结束可能会出现实际业务周不符合的情况</h3>
     </div>
 
     
@@ -284,14 +333,11 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2021/03/17/hello-world/" rel="prev" title="熙">
-                  <i class="fa fa-chevron-left"></i> 熙
+                <a href="/2021/04/12/JOOQ/" rel="prev" title="spring boot + jooq">
+                  <i class="fa fa-chevron-left"></i> spring boot + jooq
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2021/03/29/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" rel="next" title="分布式锁">
-                  分布式锁 <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>

@@ -170,7 +170,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-count">6</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -202,6 +202,135 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/15/mysql%20%E8%AE%A1%E7%AE%97%E5%91%A8%E7%9A%84%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="熙">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="鹏鹏">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/04/15/mysql%20%E8%AE%A1%E7%AE%97%E5%91%A8%E7%9A%84%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">mysql计算周的问题</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2021-04-15 09:48:53 / 修改时间：10:02:35" itemprop="dateCreated datePublished" datetime="2021-04-15T09:48:53+08:00">2021-04-15</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h3 id="DATE-FORMAT计算周有-U-u-V-v"><a href="#DATE-FORMAT计算周有-U-u-V-v" class="headerlink" title="DATE_FORMAT计算周有 %U,%u,%V,%v"></a>DATE_FORMAT计算周有 %U,%u,%V,%v</h3><p>1、首先说说%U跟%u，这两个计算的周是用0-53表示的，不知道大家有没有发现，不是在用这两个<br>  函数的时候，不是每年的1月1日都是第 <strong>0</strong> 周，有很多都是第 1 周，具体原因是<br>  %U:使用星期天作为一周的第一天，当遇到本年的第一个星期天时，就是第 1 周了，<br>   而前面的计算为第0周。<br>   举例说明：<br>   2012的第一个周日 正好是2013-01-01，那么从这一天开始就是第 1 周，而不是第0周而<br>   2013的第一个周日，是 2013-01-06，那么2013-01-01至2013-01-05是算作第 0 周，而<br>   把2013-01-06 至 2013-01-12 算作2013年的第 1 周<br>   这个%U 与 week(‘2012-01-01’,0) 是等价的；</p>
+<p>  %u:使用星期一作为一周的第一天，这个就不像上面一样了，这里并不是遇到每年的第一个周<br>   一算第 <strong>1</strong> 周，而是计算第一个周一之前的天数如果能超过3天(不包括3天)，那么计算为<br>   第 1 周。否则就计算为第0周。<br>   举例说明：<br>   2012的第一个周一是 01-02 ，那之前就只有2012-01-01这一天，≤3天，所以记为0周，<br>   2013的第一个周一是 01-07 ，之前有 6天，是＞3天的，所以记为第 1 周<br>   这个%u与week(‘2012-01-01’,1) 是等价的；<br>2、在说说 %V 跟 %v ，这两个计算的周是用1-53表示的，</p>
+<p>  %V 与 %U 一样的地方就是也是使用周日作为一周的开始，并且也是遇到第一个周日开始算作是<br>  第一周，但是这两个队这个第一个周日之前的这几天处理不一样，%U是把之前的几天算作第0周<br>  而%V是把之前的几天算作上一年的最后一周。<br>  %V 等价于 week(‘2012-01-01’,2)</p>
+<p>  %v与%u也有相似之处，就是同样适用周一作为 一周的开始,也同样计算每年第一个周一之前的<br>  天数，如果＞3天则记为第 1 周，不同是，如果≤3天，则算作上一年的最后一周<br>  %v 等价于 week(‘2012-01-01’,3)</p>
+<h3 id="YEARWEEK-date-mode"><a href="#YEARWEEK-date-mode" class="headerlink" title="YEARWEEK(*date*[,*mode*])"></a><code>YEARWEEK(*</code>date<code>*[,*</code>mode<code>*])</code></h3><p>例如 2010-3-14 ，礼拜天</p>
+<p>SELECT YEARWEEK(‘2010-3-14’) 返回 11<br>SELECT YEARWEEK(‘2010-3-14’,1) 返回 10</p>
+<p>其中第二个参数是 mode ，具体指的意思如下：</p>
+<table>
+<thead>
+<tr>
+<th>Mode</th>
+<th>First day of week</th>
+<th>Range</th>
+<th>Week 1 is the first week …</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>Sunday</td>
+<td>0-53</td>
+<td>with a Sunday in this year</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Monday</td>
+<td>0-53</td>
+<td>with more than 3 days this year</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Sunday</td>
+<td>1-53</td>
+<td>with a Sunday in this year</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Monday</td>
+<td>1-53</td>
+<td>with more than 3 days this year</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Sunday</td>
+<td>0-53</td>
+<td>with more than 3 days this year</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Monday</td>
+<td>0-53</td>
+<td>with a Monday in this year</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Sunday</td>
+<td>1-53</td>
+<td>with more than 3 days this year</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Monday</td>
+<td>1-53</td>
+<td>with a Monday in this year</td>
+</tr>
+</tbody></table>
+<h3 id="通过上面的俩个方法mysql-计算周的时候会年的开始和结束可能会出现实际业务周不符合的情况"><a href="#通过上面的俩个方法mysql-计算周的时候会年的开始和结束可能会出现实际业务周不符合的情况" class="headerlink" title="通过上面的俩个方法mysql 计算周的时候会年的开始和结束可能会出现实际业务周不符合的情况"></a>通过上面的俩个方法mysql 计算周的时候会年的开始和结束可能会出现实际业务周不符合的情况</h3>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -285,7 +414,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/29/%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5md/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/29/%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -298,7 +427,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/03/29/%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5md/" class="post-title-link" itemprop="url">同源策略</a>
+          <a href="/2021/03/29/%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5/" class="post-title-link" itemprop="url">同源策略</a>
         </h2>
 
         <div class="post-meta-container">
